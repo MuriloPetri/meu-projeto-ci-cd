@@ -34,7 +34,7 @@ jobs:
 
       - name: Update ArgoCD manifests
         run: |
-          git clone git@github.com:<seu-usuario>/hello-manifests.git
+          git clone git@github.com:<MuriloPetri>/hello-manifests.git
           cd hello-manifests
           sed -i "s|image:.*|image: ${{ secrets.DOCKER_USERNAME }}/hello-app:latest|" deployment.yaml
           git config --global user.name "github-actions"
