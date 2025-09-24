@@ -1,43 +1,51 @@
-name: CI/CD Pipeline
+name: CI/CD Pipeline de Entrega Contínua
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches: [ "main" ]
 
 jobs:
-  build-and-push:
+  build_e_push_docker:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
+      - name: Checkout do código da aplicação
         uses: actions/checkout@v3
 
-      - name: Log in to Docker Hub
+      - name: Login no Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/hello-app:latest .
+      - name: Build e Push da Imagem Docker
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          # A linha abaixo é crucial. Garante que a imagem seja enviada.
+          push: true
+          # A tag da imagem será: seu-usuario/meu-projeto-ci-cd:hash-do-commit
+          tags: ${{ secrets.DOCKER_USERNAME }}/meu-projeto-ci-cd:${{ github.sha }}
 
-      - name: Push Docker image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/hello-app:latest
-      - name: Configure SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
+      - name: Checkout do repositório de manifestos
+        uses: actions/checkout@v3
+        with:
+          # IMPORTANTE: Substitua pelo seu usuário e nome do repositório de manifestos
+          repository: MuriloPetri/meu-projeto-manifests
+          # Use um Personal Access Token (PAT) como secret
+          token: ${{ secrets.GH_PAT }}
+          path: manifests
 
-      - name: Update ArgoCD manifests
+      - name: Atualizar a tag da imagem no deployment.yaml
         run: |
-          git clone git@github.com:<MuriloPetri>/hello-manifests.git
-          cd hello-manifests
-          sed -i "s|image:.*|image: ${{ secrets.DOCKER_USERNAME }}/hello-app:latest|" deployment.yaml
-          git config --global user.name "github-actions"
-          git config --global user.email "actions@github.com"
-          git commit -am "Update image to latest"
-          git push origin main
+          # Navega para a pasta dos manifestos
+          cd manifests
+          # Substitui a linha que contém "image:" pela nova imagem e tag
+          sed -i 's|image:.*|image: ${{ secrets.DOCKER_USERNAME }}/meu-projeto-ci-cd:${{ github.sha }}|g' deployment.yaml
+
+      - name: Fazer commit e push da alteração
+        run: |
+          cd manifests
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions-bot@github.com"
+          git commit -am "CI: Atualiza a imagem da aplicação para ${{ github.sha }}"
+          git push
