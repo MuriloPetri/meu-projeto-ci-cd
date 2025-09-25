@@ -18,35 +18,33 @@ jobs:
       - name: Checkout do código da aplicação
         uses: actions/checkout@v4
 
-      # Passo 2: Faz o login no Docker Hub
-      
+      # Passo 2: Faz o login no Docker Hub com token de acesso (recomendado)
+      - name: Login no Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}  # Troque DOCKER_PASSWORD por DOCKER_TOKEN no GitHub Secrets
+
       # Passo 3: Constrói a imagem Docker e envia para o Docker Hub
       - name: Build e Push da Imagem Docker
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          # A tag da imagem será: seu-usuario-docker/meu-projeto-ci-cd:hash-do-commit
           tags: ${{ secrets.DOCKER_USERNAME }}/meu-projeto-ci-cd:${{ github.sha }}
 
       # Passo 4: Clona o repositório de manifestos para uma pasta separada
       - name: Checkout do repositório de manifestos
         uses: actions/checkout@v4
         with:
-          # IMPORTANTE: Substitua pelo seu usuário e nome do repositório de manifestos
           repository: MuriloPetri/meu-projeto-manifests
-          # Use um Personal Access Token (PAT) do GitHub com permissões de 'repo'
-          token: ${{ secrets.GH_PAT }}
-          # Clona para uma pasta chamada 'manifests'
+          token: ${{ secrets.GH_PAT }}  # Deve ser um GitHub Token com permissão de escrita no repo de manifestos
           path: manifests
-      
+
       # Passo 5: Atualiza o ficheiro deployment.yaml com a nova tag da imagem
       - name: Atualizar a tag da imagem no deployment.yaml
         run: |
-          # Navega para a pasta dos manifestos que clonamos
           cd manifests
-          # Usa o comando 'sed' para substituir a linha da imagem pela nova
-          # O 'g' no final garante que, se houver múltiplas ocorrências, todas são substituídas
           sed -i 's|image:.*|image: ${{ secrets.DOCKER_USERNAME }}/meu-projeto-ci-cd:${{ github.sha }}|g' deployment.yaml
 
       # Passo 6: Faz o commit e push da alteração para o repositório de manifestos
@@ -55,25 +53,5 @@ jobs:
           cd manifests
           git config --global user.name "GitHub Actions Bot"
           git config --global user.email "actions-bot@github.com"
-
-          name: Docker Login Example
-
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  docker-login:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
+          git commit -am "CI: Atualiza a imagem da aplicação para o commit ${{ github.sha }}"
+          git push
