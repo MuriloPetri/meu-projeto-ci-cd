@@ -29,20 +29,22 @@ jobs:
         push: true
         tags: ${{ secrets.DOCKER_USERNAME }}/hello-app:${{ github.sha }}
 
+    # 👇 Mover Setup SSH Key AQUI, antes do checkout do outro repo
+    - name: Setup SSH key
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.DEPLOY_KEY }}" > ~/.ssh/id_ed25519
+        chmod 600 ~/.ssh/id_ed25519
+        ssh-keyscan github.com >> ~/.ssh/known_hosts
+      shell: bash
+
+    # 👇 Checkout do repositório de manifests agora usa a chave já configurada
     - name: Clone manifests repository
       uses: actions/checkout@v3
       with:
         repository: MuriloPetri/meu-projeto-manifests
         path: ./manifests
-        ssh-key: ${{ secrets.DEPLOY_KEY }}
-
-    - name: Setup SSH key
-      run: |
-        mkdir -p ~/.ssh
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
-        chmod 600 ~/.ssh/id_ed25519
-        ssh-keyscan github.com >> ~/.ssh/known_hosts
-      shell: bash
+        persist-credentials: false  # 👈 impede conflito de credenciais
 
     - name: Set git remote to SSH
       run: git remote set-url origin git@github.com:MuriloPetri/meu-projeto-manifests.git
