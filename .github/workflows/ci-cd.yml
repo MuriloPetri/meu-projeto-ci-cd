@@ -34,7 +34,7 @@ jobs:
       with:
         repository: MuriloPetri/meu-projeto-manifests
         path: ./manifests
-        ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+        ssh-key: ${{ secrets.DEPLOY_KEY }}
 
     - name: Setup SSH key
       run: |
