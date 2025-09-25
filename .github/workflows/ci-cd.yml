@@ -1,6 +1,6 @@
 # Nome do Workflow
 name: CI/CD - Build e Deploy
-
+ 
 # Gatilho: Executa sempre que houver um push na branch 'main'
 on:
   push:
