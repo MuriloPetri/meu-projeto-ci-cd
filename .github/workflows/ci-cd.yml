@@ -34,9 +34,7 @@ jobs:
           # Use um Personal Access Token (PAT) como secret
           token: ${{ secrets.GH_PAT }}
           path: manifests
-      - name: Log in to Docker Hub
-          run: echo ${{ secrets.DOCKER_HUB_CREDS }} | base64 --decode | docker login --username muliropetri123 --password-stdin
-
+    
       - name: Atualizar a tag da imagem no deployment.yaml
         run: |
           # Navega para a pasta dos manifestos
