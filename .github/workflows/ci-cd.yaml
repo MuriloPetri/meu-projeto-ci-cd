@@ -1,24 +1,21 @@
-name: CI/CD Pipeline
+name: Hello-app deploy
 
 on:
   push:
-    branches: [ main ]
+    branches: ["main"]
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout do código fonte
+      - name: Checkout do código
         uses: actions/checkout@v4
 
       - name: Login no Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
-      - name: Build e Push da imagem Docker
+      - name: Build e Push da imagem
         run: |
           IMAGE=docker.io/${{ secrets.DOCKER_USERNAME }}/hello-app
           TAG=${{ github.sha }}
@@ -26,31 +23,21 @@ jobs:
           docker push $IMAGE:$TAG
           echo "IMAGE=$IMAGE:$TAG" >> $GITHUB_ENV
 
-      - name: Configurar chave SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-
-      - name: Clonar repositório de manifests via SSH
+      - name: Checkout do repositório de manifestos
         uses: actions/checkout@v4
         with:
           repository: MuriloPetri/meu-projeto-manifests
           path: manifests
           ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          persist-credentials: false
 
-      - name: Atualizar imagem no manifesto
+      - name: Atualizar manifestos
         run: |
-          sed -i "s#image:.*#image: $IMAGE#g" manifests/deployment.yaml
+          sed -i "s#docker.io/.*/hello-app:.*#${IMAGE}#g" manifests/deployment.yaml
 
-      - name: Commit e Push das mudanças
+      - name: Commit e Push
         run: |
           cd manifests
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git commit -am "Update image tag to $IMAGE"
-          git push origin main
-        env:
-          GIT_SSH_COMMAND: "ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no"
+          git commit -am "update: imagem container para $IMAGE"
+          git push
