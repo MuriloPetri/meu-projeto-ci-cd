@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout do código da aplicação
-        uses: actions/checkout@vv3
+        uses: actions/checkout@v3
 
       - name: Debug Docker Username
         run: echo "A pipeline está a tentar usar o utilizador: '${{ secrets.DOCKER_USERNAME }}'"
