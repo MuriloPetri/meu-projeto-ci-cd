@@ -246,7 +246,7 @@ Clique em Create e aguarde todos os pods ficarem healthy.
 Use o comando:
 ```bash
 kubectl port-forward svc/hello-app -n default 8081:80
-```
+``` 
 
 e acesse a porta 81:
 ```bash
