@@ -154,9 +154,6 @@ DOCKER_USERNAME
 DOCKER_PASSWORD
 
 SSH_PRIVATE_KEY (para acessar o repositório de manifests)
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
 
 ### 3. Criar o repositorio Manifests
 Crie um repositório separado (meu-projeto-manifests) contendo:
