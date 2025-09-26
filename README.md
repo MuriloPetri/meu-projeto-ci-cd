@@ -221,25 +221,27 @@ e acesse a pagina local da porta 80:
 https://localhost:8080/
 ```
 
-### 5. Criar App no ArgoCD
+### ⚙️ 5. Criando a Aplicação no ArgoCD
 
-Clique em New App
+Com a interface do ArgoCD aberta em `https://localhost:8080/`, siga os passos para registrar sua nova aplicação:
 
-Preencha as informações:
+1.  Clique no botão **+ NEW APP** no canto superior esquerdo.
+2.  Preencha os campos principais na seção **GENERAL**:
+    -   **Application Name:** `hello-app`
+    -   **Project:** `default`
+    -   **Sync Policy:** `Automatic` (Opcional, mas recomendado para GitOps)
 
-Application Name: hello-app
+3.  Na seção **SOURCE**, configure o repositório de manifestos:
+    -   **Repository URL:** A URL **SSH** do seu repositório de manifestos (ex: `git@github.com:seu-usuario/meu-projeto-manifests.git`).
+    -   **Path:** `.` (um ponto, para indicar a raiz do repositório).
 
-Project: default
+4.  Finalmente, na seção **DESTINATION**, defina onde a aplicação será implantada:
+    -   **Cluster:** `https://kubernetes.default.svc`
+    -   **Namespace:** `default`
 
-Repository URL: URL do repositório hello-manifests
+5.  Clique em **CREATE** no topo da página.
 
-Path: /
-
-Cluster: https://kubernetes.default.svc
-
-Namespace: default
-
-Clique em Create e aguarde todos os pods ficarem healthy.
+Após a criação, o ArgoCD começará o processo de sincronização. Aguarde até que o status da aplicação mude para **Healthy** ✅ e **Synced** ✅.
 
 ### 6. Testar a aplicação local.
 
