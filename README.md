@@ -243,7 +243,7 @@ Com a interface do ArgoCD aberta em `https://localhost:8080/`, siga os passos pa
 
 Após a criação, o ArgoCD começará o processo de sincronização. Aguarde até que o status da aplicação mude para **Healthy** ✅ e **Synced** ✅.
 
-### 🧪 6. Testar a Aplicação Local
+#### 🧪 6. Testar a Aplicação Local
 
 Para validar que a última versão da sua aplicação está rodando corretamente no cluster, vamos criar um túnel de comunicação seguro entre sua máquina e o serviço no Kubernetes.
 
