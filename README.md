@@ -161,6 +161,27 @@ Adicione os segredos no GitHub:
 
 <img width="1893" height="947" alt="Image" src="https://github.com/user-attachments/assets/84668f5d-034a-4fb4-9d36-05b877fe26da" />
 
+*PARA PEGAR A CHAVE SSH PUBLICA/PRIVADA SIGA ESSES PASSOS:*
+---
+
+## 🔐 Gerando e Configurando a Chave SSH para o GitHub Actions
+
+Para que o GitHub Actions possa acessar e atualizar o repositório de manifests via SSH, é necessário gerar um par de chaves e configurar os secrets corretamente.
+
+### 1. Gerar o par de chaves SSH (ed25519)
+
+No terminal, execute:
+*Acesse: Settings → Secrets and variables → Actions → New repository secret*
+
+```bash
+ssh-keygen -t ed25519 -C "ci@meu-projeto" -f ~/.ssh/id_ed25519_ci -N ""
+```
+A chave publica (~/.ssh/id_ed25519_ci.pub) Cole isso no repositório Manifest:
+*Acesse: Settings → Deploy Keys → Add deploy key*
+
+A chave privada (~/.ssh/id_ed25519_ci) Cole isso no Secrets criado do repositorio ci-cd
+*
+
 ## 📃3. Criar o repositorio Manifests
 Crie um repositório separado (meu-projeto-manifests) contendo:
 
