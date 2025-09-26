@@ -74,7 +74,10 @@ CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
 ### 2. Criar Workflow do Github Actions
 Criar o workflow do GitHub Actions
 
-No repositório projeto-ci-cd, crie o arquivo .github/workflows/ci-cd.yaml com etapas de:
+No repositório projeto-ci-cd, crie o arquivo .github/workflows/ci-cd.yaml deve ficar assim:
+https://github.com/MuriloPetri/meu-projeto-ci-cd/issues/3#issue-3459212431
+
+dentro de ci-cd.yaml:
 
 ```bash
 name: CI/CD Pipeline 
@@ -154,6 +157,8 @@ DOCKER_USERNAME
 DOCKER_PASSWORD
 
 SSH_PRIVATE_KEY (para acessar o repositório de manifests)
+
+https://github.com/MuriloPetri/meu-projeto-ci-cd/issues/1#issue-3459204587
 
 ### 3. Criar o repositorio Manifests
 Crie um repositório separado (meu-projeto-manifests) contendo:
@@ -247,3 +252,4 @@ e acesse a porta 81:
 ```bash
 http://localhost:8081/
 ```
+https://github.com/MuriloPetri/meu-projeto-ci-cd/issues/2#issue-3459211519
