@@ -202,3 +202,51 @@ spec:
       targetPort: 80
   type: ClusterIP
 ```
+
+### 4. Instalar e Configurar o ArgoCD
+```bash
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+```
+
+Acesse a interface do Argo com:
+```bash
+kubectl port-forward svc/argocd-server -n argocd 8080:443
+```
+
+e acesse a pagina local da porta 80:
+```bash
+https://localhost:8080/
+```
+
+### 5. Criar App no ArgoCD
+
+Clique em New App
+
+Preencha as informações:
+
+Application Name: hello-app
+
+Project: default
+
+Repository URL: URL do repositório hello-manifests
+
+Path: /
+
+Cluster: https://kubernetes.default.svc
+
+Namespace: default
+
+Clique em Create e aguarde todos os pods ficarem healthy.
+
+### 6. Testar a aplicação local.
+
+Use o comando:
+```bash
+kubectl port-forward svc/hello-app -n default 8081:80
+```
+
+e acesse a porta 81:
+```bash
+http://localhost:8081/
+```
