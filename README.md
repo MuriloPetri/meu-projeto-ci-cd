@@ -152,11 +152,11 @@ jobs:
 
 Adicione os segredos no GitHub:
 
-DOCKER_USERNAME
+**DOCKER_USERNAME**
 
-DOCKER_PASSWORD
+**DOCKER_PASSWORD**
 
-SSH_PRIVATE_KEY (para acessar o repositório de manifests)
+**SSH_PRIVATE_KEY** (para acessar o repositório de manifests)
 
 <img width="1893" height="947" alt="Image" src="https://github.com/user-attachments/assets/84668f5d-034a-4fb4-9d36-05b877fe26da" />
 
