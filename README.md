@@ -252,7 +252,7 @@ Para validar que a última versão da sua aplicação está rodando corretamente
 Execute o comando abaixo no seu terminal. Ele irá redirecionar todo o tráfego da porta `8081` da sua máquina local para a porta `80` do serviço `hello-app` dentro do cluster.
 
 ```bash
-kubectl port-forward svc/hello-app -n default 8081:80
+kubectl port-forward svc/*NOME DO SEU CLUSTER* -n default 8081:80
 e acesse a porta 81:
 ```bash
 http://localhost:8081/
