@@ -249,7 +249,7 @@ Para validar que a última versão da sua aplicação está rodando corretamente
 
 **1. Crie o Port-Forward**
 
-Execute o comando abaixo no seu terminal. Ele irá redirecionar todo o tráfego da porta `8081` da sua máquina local para a porta `80` do serviço `hello-app` dentro do cluster.
+Execute o comando abaixo no seu terminal. Ele irá redirecionar todo o tráfego da porta `8081` da sua máquina local para a porta `80`.
 
 ```bash
 kubectl port-forward svc/*NOME DO SEU CLUSTER* -n default 8081:80
@@ -257,4 +257,5 @@ e acesse a porta 81:
 ```bash
 http://localhost:8081/
 ```
+**O resultado esperado será:
 <img width="337" height="129" alt="Image" src="https://github.com/user-attachments/assets/542c3a69-ca73-496c-8ec0-a7011b7996cf" />
