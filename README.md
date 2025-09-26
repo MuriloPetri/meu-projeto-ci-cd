@@ -243,13 +243,16 @@ Com a interface do ArgoCD aberta em `https://localhost:8080/`, siga os passos pa
 
 Após a criação, o ArgoCD começará o processo de sincronização. Aguarde até que o status da aplicação mude para **Healthy** ✅ e **Synced** ✅.
 
-### 6. Testar a aplicação local.
+### 🧪 6. Testar a Aplicação Local
 
-Use o comando:
+Para validar que a última versão da sua aplicação está rodando corretamente no cluster, vamos criar um túnel de comunicação seguro entre sua máquina e o serviço no Kubernetes.
+
+**1. Crie o Port-Forward**
+
+Execute o comando abaixo no seu terminal. Ele irá redirecionar todo o tráfego da porta `8081` da sua máquina local para a porta `80` do serviço `hello-app` dentro do cluster.
+
 ```bash
 kubectl port-forward svc/hello-app -n default 8081:80
-``` 
-
 e acesse a porta 81:
 ```bash
 http://localhost:8081/
