@@ -257,6 +257,4 @@ e acesse a porta 81:
 ```bash
 http://localhost:8081/
 ```
-**O resultado esperado será:
-\n
 <img width="337" height="129" alt="Image" src="https://github.com/user-attachments/assets/542c3a69-ca73-496c-8ec0-a7011b7996cf" />
